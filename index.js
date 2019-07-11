@@ -4,6 +4,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const config = require('./utils/config');
 
 const blogSchema = mongoose.Schema({
     title: String,
@@ -14,8 +15,7 @@ const blogSchema = mongoose.Schema({
 
 const Blog = mongoose.model('Blog', blogSchema);
 
-const mongoPass = 'JC6AwLWockKxnJ5b';
-const mongoUrl = `mongodb+srv://fullstack:${mongoPass}@cluster0-jzxa8.mongodb.net/bloglist?retryWrites=true&w=majority`;
+const mongoUrl = config.MONGODB_URI;
 mongoose.connect(mongoUrl, { useNewUrlParser: true })
     .then(console.log('Connected to MongoDB'))
     .catch(error => {
@@ -43,7 +43,6 @@ app.post('/api/blogs', (req, res) => {
         });
 });
 
-const PORT = process.env.PORT || 3003;
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+app.listen(config.PORT, () => {
+    console.log(`Server running on port ${config.PORT}`);
 });
