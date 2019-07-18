@@ -4,9 +4,9 @@
   "description": "��#\u0000 \u0000b\u0000l\u0000o\u0000g\u0000l\u0000i\u0000s\u0000t\u0000\r\u0000 \u0000",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "watch": "nodemon index.js",
-    "test": "jest --verbose",
+    "start": "cross-env NODE_ENV=production node index.js",
+    "watch": "cross-env NODE_ENV=development nodemon index.js",
+    "test": "cross-env NODE_ENV=test jest --verbose",
     "deploy": "git push heroku master",
     "logs:prod": "heroku logs --tail",
     "lint": "eslint ."
@@ -27,9 +27,11 @@
   },
   "homepage": "https://github.com/nikalomoiris/bloglist#readme",
   "devDependencies": {
+    "cross-env": "^5.2.0",
     "eslint": "^6.0.1",
     "jest": "^24.8.0",
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
+    "supertest": "^4.0.2"
   },
   "dependencies": {
     "cors": "^2.8.5",
