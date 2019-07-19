@@ -1,8 +1,34 @@
 const mongoose = require('mongoose');
 const supertest = require('supertest');
 const app = require('../app');
+const Blog = require('../models/blog');
 
 const api = supertest(app);
+
+const initialBlogs = [
+    {
+        title: 'One Blog post',
+        author: 'Nikos',
+        url: 'www.nikos.com',
+        likes: 74
+    },
+    {
+        title: 'Another Blog post',
+        author: 'Georgia',
+        url: 'www.georgia.com',
+        likes: 98
+    }
+];
+
+beforeEach(async () => {
+    await Blog.deleteMany({});
+
+    let blogObject = new Blog(initialBlogs[0]);
+    await blogObject.save();
+
+    blogObject = new Blog(initialBlogs[1]);
+    await blogObject.save();
+});
 
 test('blogs are returned as json', async () => {
     await api
