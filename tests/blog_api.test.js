@@ -44,8 +44,6 @@ test('the blogs have a property named "id"', async () => {
 });
 
 test('posting a blog increases the number of blogs saved', async () => {
-    const initialBlogs = await api.get('/api/blogs');
-
     const newBlog = {
         title: 'My sixth Blog post',
         author: 'Me and you and him',
@@ -55,12 +53,12 @@ test('posting a blog increases the number of blogs saved', async () => {
 
     await api.post('/api/blogs')
         .send(newBlog)
-        .expect(201)
+        .expect(200)
         .expect('Content-Type', /application\/json/);
 
     const finalBlogs = await api.get('/api/blogs');
 
-    expect(initialBlogs.body.length + 1).toBe(finalBlogs.body.length);
+    expect(initialBlogs.length + 1).toBe(finalBlogs.body.length);
 });
 
 afterAll(() => {
