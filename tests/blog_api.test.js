@@ -84,6 +84,21 @@ test('posting a blog without url property returns 400 Bad Request', async () => 
         .expect(400);
 });
 
+test('deleting a blog returns 204 Not Found', async () => {
+    const blogsBeforeDelete = await helper.blogsInDb();
+    const blogToDelete = blogsBeforeDelete[0];
+    const idToDelete = blogToDelete.id;
+
+    await api.delete(`/api/blogs/${idToDelete}`)
+        .expect(204);
+
+    const blogsAfterDelete = await helper.blogsInDb();
+    expect(blogsBeforeDelete.length).toBe(blogsAfterDelete.length + 1);
+
+    const titles = blogsAfterDelete.map(blog => blog.title);
+    expect(titles).not.toContain(blogToDelete.title);
+});
+
 afterAll(() => {
     mongoose.connection.close();
 });
