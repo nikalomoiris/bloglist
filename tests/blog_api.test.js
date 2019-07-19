@@ -99,6 +99,23 @@ test('deleting a blog returns 204 Not Found', async () => {
     expect(titles).not.toContain(blogToDelete.title);
 });
 
+test('updating a blog returns 200 OK', async () => {
+    const blogs = await helper.blogsInDb();
+    const blogToUpdate = blogs[0];
+    const idToUpdate = blogToUpdate.id;
+
+    const updatedBlog = {
+        title: blogToUpdate.title,
+        author: blogToUpdate.author,
+        url: blogToUpdate.url,
+        likes: 500
+    };
+
+    await api.put(`/api/blogs/${idToUpdate}`)
+        .send(updatedBlog)
+        .expect(200);
+});
+
 afterAll(() => {
     mongoose.connection.close();
 });
