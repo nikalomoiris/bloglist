@@ -60,6 +60,30 @@ test('posting a blog without likes property defaults to 0 likes', async () => {
     expect(postedBlog.body.likes).toBe(0);
 });
 
+test('posting a blog without title property returns 400 Bad Request', async () => {
+    const newBlog = {
+        author: 'Me and you and him',
+        url: 'www.piiiiiiidd.com',
+        likes: 98
+    };
+
+    await api.post('/api/blogs')
+        .send(newBlog)
+        .expect(400);
+});
+
+test('posting a blog without url property returns 400 Bad Request', async () => {
+    const newBlog = {
+        title: 'My sixth Blog post',
+        author: 'Me and you and him',
+        likes: 98
+    };
+
+    await api.post('/api/blogs')
+        .send(newBlog)
+        .expect(400);
+});
+
 afterAll(() => {
     mongoose.connection.close();
 });
