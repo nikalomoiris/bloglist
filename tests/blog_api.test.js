@@ -7,6 +7,8 @@ const helper = require('./test_helper');
 
 const api = supertest(app);
 
+let token = '';
+
 describe('Test for users api when there is initially one user at db', () => {
     beforeEach(async () => {
         await User.deleteMany({});
@@ -62,6 +64,19 @@ describe('Test for users api when there is initially one user at db', () => {
 describe('Tests for the blogs api', () => {
     beforeEach(async () => {
         const creator = await helper.usersInDb();
+
+        const newUser = {
+            username: 'nikos',
+            name: 'Nikos Kalomoiris',
+            password: 'helloworld'
+        };
+
+        await api
+            .post('/api/users')
+            .send(newUser);
+
+        const loginResponse = await api.post('/api/login').send({ username: 'nikos', password: 'helloworld' });
+        token = loginResponse.body.token;
         const creatorId = creator[0].id;
         await Blog.deleteMany({});
 
@@ -97,6 +112,7 @@ describe('Tests for the blogs api', () => {
         };
 
         await api.post('/api/blogs')
+            .set({ Authorization: `Bearer ${token}` })
             .send(newBlog)
             .expect(200)
             .expect('Content-Type', /application\/json/);
@@ -117,6 +133,7 @@ describe('Tests for the blogs api', () => {
         };
 
         const postedBlog = await api.post('/api/blogs')
+            .set({ Authorization: `Bearer ${token}` })
             .send(newBlog)
             .expect(200)
             .expect('Content-Type', /application\/json/);
@@ -134,6 +151,7 @@ describe('Tests for the blogs api', () => {
         };
 
         await api.post('/api/blogs')
+            .set({ Authorization: `Bearer ${token}` })
             .send(newBlog)
             .expect(400);
     });
@@ -149,6 +167,7 @@ describe('Tests for the blogs api', () => {
         };
 
         await api.post('/api/blogs')
+            .set({ Authorization: `Bearer ${token}` })
             .send(newBlog)
             .expect(400);
     });
