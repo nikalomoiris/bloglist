@@ -18,6 +18,7 @@ mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true })
     .catch((error) =>
         logger.error('Connection to MongoDB failed', error.message));
 
+app.use(express.static('build'));
 app.use(cors());
 app.use(bodyParser.json());
 app.use(middleware.requestLogger);
