@@ -4,10 +4,12 @@
   "description": "��#\u0000 \u0000b\u0000l\u0000o\u0000g\u0000l\u0000i\u0000s\u0000t\u0000\r\u0000 \u0000",
   "main": "index.js",
   "scripts": {
+    "build:ui": "rm -rf build && cd ../bloglist-frontend && npm run build --prod && cp -r build ../bloglist/",
     "start": "cross-env NODE_ENV=production node index.js",
     "watch": "cross-env NODE_ENV=development nodemon index.js",
     "test": "cross-env NODE_ENV=test jest --verbose",
     "deploy": "git push heroku master",
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push && npm run deploy",
     "logs:prod": "heroku logs --tail",
     "lint": "eslint .",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls"
