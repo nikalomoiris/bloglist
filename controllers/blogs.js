@@ -42,7 +42,10 @@ blogsRouter.post('/', async (req, res, next) => {
         const savedBlog = await blog.save();
         user.blogs = user.blogs.concat(savedBlog._id);
         await user.save();
-        res.json(savedBlog.toJSON());
+        const populatedBlog = await Blog
+        .find({_id: savedBlog._id})
+        .populate('user', { username: 1, name: 1, id: 1 });
+        res.json(populatedBlog);
     } catch (exception) {
         next(exception);
     }
@@ -69,7 +72,9 @@ blogsRouter.put('/:id', async (req, res, next) => {
     };
 
     try {
-        const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, blog, { new: true });
+        const updatedBlog = await Blog
+            .findByIdAndUpdate(req.params.id, blog, { new: true })
+            .populate('user', { username: 1, name: 1, id: 1 });
         res.json(updatedBlog.toJSON());
     } catch (exception) {
         next(exception);
