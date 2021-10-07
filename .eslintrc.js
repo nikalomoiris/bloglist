@@ -20,7 +20,7 @@ module.exports = {
         ],
         'linebreak-style': [
             'error',
-            'windows'
+            'unix'
         ],
         'quotes': [
             'error',
@@ -29,6 +29,7 @@ module.exports = {
         'semi': [
             'error',
             'always'
-        ]
+        ],
+        'eqeqeq':'error'
     }
 };
